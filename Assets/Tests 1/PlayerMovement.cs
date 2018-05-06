@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
     private bool jump;
     private bool shoot;
+    private bool changed = false;
     private bool inJump = true;
     private CharacterController controller;
     Touch touch;
@@ -33,26 +34,27 @@ public class PlayerMovement : MonoBehaviour
 
         //startowanie w dobrej pozycji
 
-        //start 
-        Vector3 bottom = controller.transform.position - new Vector3(0, controller.height, 0);
-        RaycastHit hit;
-        Debug.Log(controller.transform.position);
-        if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
-        {
-            Debug.Log("błąd");
-            Debug.Log(hit.distance);
 
-        }
-        
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        controller.transform.position = new Vector3(10.0f, -50.0f, 2.0f);
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
     }
 
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     public void Jump()
     {
         jump = true;
         inJump = true;
         moveDirection.y = jumpSpeed;
     }
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
     private void AnimationArcher( bool j, bool sh)
     {
         animator.SetBool("Right", true);
@@ -82,23 +84,39 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        //Debug.Log(controller.isGrounded);
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        
+
+        if (!changed)
+        {
+            Vector3 bottom = controller.transform.position - new Vector3(0, controller.height, 0);
+            RaycastHit hit;
+            Debug.Log(controller.transform.position);
+            Debug.Log(Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit));
+            if (!Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
+            {
+                Physics.Raycast(bottom, new Vector3(0, 1, 0), out hit);
+                Debug.Log("błąd");
+                Debug.Log(hit.distance);
+                controller.transform.position = new Vector3(controller.transform.position.x, controller.transform.position.y + hit.distance, controller.transform.position.z);
+            }
+            changed = true;
+        }
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
             if (!buttonRect.Contains(touch.position)) shoot = true;
         }
+
         //ZMIANA
         //if (controller.isGrounded)
         if (IsGrounded())
         {
             inJump = false;
-            //jump = Input.GetKey(KeyCode.Space);
             moveDirection = new Vector3(1, 0, 0);
             moveDirection = transform.TransformDirection(moveDirection);
             moveDirection *= speed;

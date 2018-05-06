@@ -87,4 +87,16 @@ public class GroundTest
         Debug.Log(hit.distance);
         Assert.IsTrue(check_false, "Jump doesn't work properly");
     }
+
+    [UnityTest]
+    public IEnumerator SpawnGroundTest()
+    {
+        bool check_false = true;
+        SceneManager.LoadScene(1);
+        yield return new WaitForSeconds(0.3f);
+        Default_start();
+        Vector3 bottom = testController.transform.position - new Vector3(0, testController.height, 0);
+        RaycastHit hit;
+        Assert.IsTrue(Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit), "spawn in wrong place");
+    }
 }
