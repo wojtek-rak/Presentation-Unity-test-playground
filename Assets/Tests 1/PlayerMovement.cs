@@ -30,14 +30,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         animator = GetComponent<Animator>();
-        playerCamera.transparencySortMode = TransparencySortMode.Orthographic;
+
 
         //startowanie w dobrej pozycji
-
-
-
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        controller.transform.position = new Vector3(10.0f, -50.0f, 2.0f);
+        //controller.transform.position = new Vector3(10.0f, -50.0f, 2.0f);
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -51,17 +48,8 @@ public class PlayerMovement : MonoBehaviour
         inJump = true;
         moveDirection.y = jumpSpeed;
     }
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-
-    private void AnimationArcher( bool j, bool sh)
-    {
-        animator.SetBool("Right", true);
-        animator.SetBool("Jump", j);
-        animator.SetBool("Shoot", sh);
-    }
-    //zmiana
     public bool IsGrounded()
     {
         if (controller.isGrounded)
@@ -73,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         if (!inJump)
         {
-            if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit, 2f))
+            if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
             {
                 controller.Move(new Vector3(0, -hit.distance, 0));
                 return true;
@@ -82,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
         
         return false;
     }
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     void Update()
     {
 
@@ -106,13 +96,10 @@ public class PlayerMovement : MonoBehaviour
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        if (Input.touchCount > 0)
-        {
-            touch = Input.GetTouch(0);
-            if (!buttonRect.Contains(touch.position)) shoot = true;
-        }
 
-        //ZMIANA
+
+
+
         //if (controller.isGrounded)
         if (IsGrounded())
         {
@@ -121,36 +108,39 @@ public class PlayerMovement : MonoBehaviour
             moveDirection = transform.TransformDirection(moveDirection);
             moveDirection *= speed;
 
-            
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
             }
 
-            /*if (Input.touchCount > 0)
-            {
-                moveDirection.y = jumpSpeed;
-            }*/
-
-           if(jump)
-            {
-                Debug.Log("jump");
-                inJump = true;
-                moveDirection.y = jumpSpeed;
-            }
         }
         
-
+        //move
         moveDirection.y -= gravity * Time.smoothDeltaTime;
         controller.Move(moveDirection * Time.smoothDeltaTime);
 
+
+        //for animations
+        if (Input.GetMouseButtonDown(0))
+        {
+            shoot = true;
+        }
         AnimationArcher(jump, shoot);
         jump = false;
         shoot = false;
 
-        //Debug.Log(moveDirection.y);
 
-        //After we move, adjust the camera to follow the player
+        //Camera follow player
         playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 10, playerCamera.transform.position.z);
     }
+
+
+    //for animations
+    private void AnimationArcher(bool j, bool sh)
+    {
+        animator.SetBool("Right", true);
+        animator.SetBool("Jump", j);
+        animator.SetBool("Shoot", sh);
+    }
+
 }

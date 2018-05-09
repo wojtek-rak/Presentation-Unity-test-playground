@@ -57,7 +57,7 @@ public class Shoot_arrow : MonoBehaviour
                 //Debug.Log(ray);
                 direct = ray.origin;
                 direct.z = 0;
-                archerPos = transform.position + new Vector3(0, -4.0f, 12.4f);
+                archerPos = transform.position + new Vector3(0, -9.0f, 32f);
                 direct.x -= archerPos.x;
                 direct.y -= archerPos.y;
                 if (direct.x < 0)

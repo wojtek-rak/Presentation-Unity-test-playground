@@ -31,8 +31,10 @@ public class GroundTest
     // and allows you to yield null to skip a frame in EditMode
 
     [UnityTest]
+    [Timeout(100000000)]
     public IEnumerator GroundMoveTest()
     {
+        Time.timeScale = 10f;
         bool check_false = true;
         SceneManager.LoadScene(1);
         yield return new WaitForSeconds(0.3f);
@@ -40,7 +42,8 @@ public class GroundTest
         yield return new WaitUntil(Ground_check);
 
         float start = Time.time;
-        while (Time.time - start < 3)
+
+        while (Time.time - start < 100)
         {
             yield return null;
             yield return new WaitForFixedUpdate();
@@ -50,8 +53,9 @@ public class GroundTest
 
             if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit, 5f))
             {
-                if(hit.distance > 2f)
+                if(hit.distance > 5f)
                 {
+                    Debug.Log(hit.distance);
                     check_false = false;
                 }
                 
@@ -91,7 +95,7 @@ public class GroundTest
     [UnityTest]
     public IEnumerator SpawnGroundTest()
     {
-        bool check_false = true;
+        //bool check_false = true;
         SceneManager.LoadScene(1);
         yield return new WaitForSeconds(0.3f);
         Default_start();
