@@ -226,7 +226,6 @@ public class bowAndArrow : MonoBehaviour {
 	//
 
 	public void createArrow(bool hitTarget) {
-		Camera.main.GetComponent<camMovement> ().resetCamera ();
 		// when a new arrow is created means that:
 		// sounds has been played
 		stringPullSoundPlayed = false;
@@ -288,8 +287,6 @@ public class bowAndArrow : MonoBehaviour {
 		stringPullout = stringRestPosition;
 
 		// Cam
-		Camera.main.GetComponent<camMovement> ().resetCamera ();
-		Camera.main.GetComponent<camMovement> ().setArrow (arrow);
 
 	}
 
