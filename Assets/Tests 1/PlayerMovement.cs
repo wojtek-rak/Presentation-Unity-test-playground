@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
 
 
-        //startowanie w dobrej pozycji
+        //startowanie w danej pozycji
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         //controller.transform.position = new Vector3(10.0f, -50.0f, 2.0f);
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -41,8 +41,6 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     public void Jump()
     {
         jump = true;
@@ -51,58 +49,23 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    public bool IsGrounded()
-    {
-        if (controller.isGrounded)
-        {
-            return true;
-        }
-        Vector3 bottom = gameObject.transform.position - new Vector3(0, controller.height, 0);
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( IsGrounded ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        RaycastHit hit;
-        if (!inJump)
-        {
-            if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
-            {
-                controller.Move(new Vector3(0, -hit.distance, 0));
-                return true;
-            }
-        }
-        
-        return false;
-    }
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( IsGrounded ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     void Update()
     {
 
 
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( changed ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        if (!changed)
-        {
-            Vector3 bottom = controller.transform.position - new Vector3(0, controller.height, 0);
-            RaycastHit hit;
-            Debug.Log(controller.transform.position);
-            Debug.Log(Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit));
-            if (!Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
-            {
-                Physics.Raycast(bottom, new Vector3(0, 1, 0), out hit);
-                Debug.Log("błąd");
-                Debug.Log(hit.distance);
-                controller.transform.position = new Vector3(controller.transform.position.x, controller.transform.position.y + hit.distance, controller.transform.position.z);
-            }
-            changed = true;
-        }
-
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( TEST ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( changed ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
-
-        //if (controller.isGrounded)
-        if (IsGrounded())
+        //if (IsGrounded())
+        if (controller.isGrounded)
         {
             inJump = false;
             moveDirection = new Vector3(1, 0, 0);

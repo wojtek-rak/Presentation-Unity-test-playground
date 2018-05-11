@@ -43,7 +43,7 @@ public class GroundTest
 
         float start = Time.time;
 
-        while (Time.time - start < 100)
+        while (Time.time - start < 40)
         {
             yield return null;
             yield return new WaitForFixedUpdate();
@@ -53,7 +53,7 @@ public class GroundTest
 
             if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit, 5f))
             {
-                if(hit.distance > 5f)
+                if(hit.distance > 3f)
                 {
                     Debug.Log(hit.distance);
                     check_false = false;
@@ -96,12 +96,25 @@ public class GroundTest
     [UnityTest]
     public IEnumerator SpawnGroundTest()
     {
-        //bool check_false = true;
-        SceneManager.LoadScene(1);
-        yield return new WaitForSeconds(0.3f);
-        Default_start();
-        Vector3 bottom = testController.transform.position - new Vector3(0, testController.height, 0);
+        Time.timeScale = 10f;
+        bool check_false = true;
+        Vector3 bottom;
         RaycastHit hit;
-        Assert.IsTrue(Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit), "spawn in wrong place");
+        for (int i = 1; i < 30; i += 1)
+        {
+            SceneManager.LoadScene(1);
+            yield return new WaitForSeconds(0.3f);
+            Default_start();
+            bottom = testController.transform.position - new Vector3(0, testController.height, 0);
+            if (!Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
+            {
+                check_false = false;
+            }
+        }
+
+        
+
+
+        Assert.IsTrue(check_false, "spawn in wrong place");
     }
 }
