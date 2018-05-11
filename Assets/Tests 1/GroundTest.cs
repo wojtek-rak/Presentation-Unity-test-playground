@@ -75,7 +75,8 @@ public class GroundTest
         Default_start();
         yield return new WaitUntil(Ground_check);
         yield return new WaitForSeconds(0.3f);
-        archer.GetComponent<PlayerMovement>().Jump();
+        yield return new WaitForFixedUpdate();
+        archer.GetComponent<PlayerMovement>().jump_test = true;
         yield return new WaitForSeconds(1f);
         Vector3 bottom = testController.transform.position - new Vector3(0, testController.height, 0);
         RaycastHit hit;
