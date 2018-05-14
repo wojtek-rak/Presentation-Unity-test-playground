@@ -70,7 +70,7 @@ public class Shoot_arrow : MonoBehaviour
                 }
                 arrow_rigidbody2D = arrow.GetComponent<Rigidbody2D>();
                 arrow_rigidbody2D.velocity = direct * force;
-                arrow_rigidbody2D.velocity = Vector2.ClampMagnitude(arrow_rigidbody2D.velocity, 190f);
+                //arrow_rigidbody2D.velocity = Vector2.ClampMagnitude(arrow_rigidbody2D.velocity, 90f);
                 //Debug.Log(ray.origin);
                 //Debug.Log(direct);
             }

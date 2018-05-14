@@ -7,7 +7,6 @@ using System;
 public class PlayerMovement : MonoBehaviour
 {
 
-    public bool jump_test = false;
     public Camera playerCamera;
     private Animator animator;
     public float speed = 12.0F;
@@ -74,13 +73,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                jump_test = true;
-            }
-
-            if (jump_test)
-            {
                 Jump();
-                jump_test = false;
             }
 
         }
