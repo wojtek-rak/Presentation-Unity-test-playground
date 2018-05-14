@@ -6,7 +6,7 @@ using System;
 
 public class PlayerMovement : MonoBehaviour
 {
-
+    public bool ground = false;
     public Camera playerCamera;
     private Animator animator;
     public float speed = 12.0F;
@@ -49,7 +49,29 @@ public class PlayerMovement : MonoBehaviour
 
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( IsGrounded ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    public bool IsGrounded()
+    {
+        if (controller.isGrounded) return true;
 
+        Vector3 bottom = controller.transform.position - new Vector3(0, 4f, 0);
+
+        RaycastHit hit;
+        if (!inJump)
+        {
+            if (Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit))
+            {
+                //Debug.Log(controller.transform.position);
+                controller.transform.position = new Vector3(controller.transform.position.x, controller.transform.position.y - hit.distance, controller.transform.position.z);
+                //controller.Move(new Vector3(0, -hit.distance, 0));
+                Physics.Raycast(bottom, new Vector3(0, -1, 0), out hit);
+                //Debug.Log(controller.transform.position);
+                //ground = true;
+                return true;
+            }
+        }
+        
+        return false;
+    }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( IsGrounded ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     void Update()
@@ -60,12 +82,13 @@ public class PlayerMovement : MonoBehaviour
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ( ( ( changed ) ) ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+        ground = false;
 
-
-
-        //if (IsGrounded())
-        if (controller.isGrounded)
+        ground = true;
+        if (IsGrounded())
+        //if (controller.isGrounded)
         {
+            
             inJump = false;
             moveDirection = new Vector3(1, 0, 0);
             moveDirection = transform.TransformDirection(moveDirection);
@@ -75,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 Jump();
             }
-
+            
         }
         
         //move
